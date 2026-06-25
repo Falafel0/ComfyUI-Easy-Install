@@ -1,0 +1,28 @@
+# Generated / installed by scripts
+ComfyUI/
+python_embeded/
+models/
+output/
+input/
+temp/
+user/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# System
+.DS_Store
+Thumbs.db
+
+# IDE
+.qwen/
+.vscode/
+.idea/
+
+# Archives
+*.7z
+*.zip
+Helper-CEI.zip
