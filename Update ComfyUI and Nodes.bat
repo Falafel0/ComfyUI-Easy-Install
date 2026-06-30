@@ -17,19 +17,16 @@ cd %DIR_LVL%ComfyUI&&git.exe checkout master -q&&cd %~dp0
 cd %DIR_LVL%update&&call update_comfyui_stable.bat nopause&&cd %~dp0
 echo.
 
-:: Re-apply warning patches after ComfyUI update
+:: Apply ComfyUI patches (warning suppression + int8_tensorwise support) ::
 %PYTHON_EXE% %DIR_LVL%update\patch_warnings.py
+echo.
 
 :: Erasing ~* folders ::
 if exist "%DIR_LVL%python_embeded\Lib\site-packages\~*" (powershell -NoProfile -ExecutionPolicy Bypass -command "Get-ChildItem '%DIR_LVL%python_embeded\Lib\site-packages\' -Directory | Where-Object {$_.Name -like '~*'} | Remove-Item -Recurse -Force")
 
 Echo %green%:::::::::::::: Updating All Nodes ::::::::::::::%reset%
 Echo.
-if exist "%DIR_LVL%ComfyUI\custom_nodes\ComfyUI-Manager\cm-cli.py" (
-    %PYTHON_EXE% -I %DIR_LVL%ComfyUI\custom_nodes\ComfyUI-Manager\cm-cli.py update all
-) else (
-    echo %yellow%ComfyUI-Manager not found, skipping node updates.%reset%
-)
+%PYTHON_EXE% -I %DIR_LVL%ComfyUI\custom_nodes\ComfyUI-Manager\cm-cli.py update all
 
 :: Restoring Numpy 1.26.4 ::
 %PYTHON_EXE% -c "import numpy, sys; sys.exit(0 if numpy.__version__ == '1.26.4' else 1)" 2>nul || %PYTHON_EXE% -I -m pip install --force-reinstall numpy==1.26.4 --no-deps --no-warn-script-location
